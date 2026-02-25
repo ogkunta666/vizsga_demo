@@ -59,6 +59,17 @@ return [
             'throw' => false,
             'report' => false,
         ],
+               'ftp' => [
+            'driver'   => 'ftp',
+            'host'     => env('FTP_SERVER', '185.59.210.34'),
+            'username' => env('FTP_USERNAME', 'mc-marzol'),
+            'password' => env('FTP_PASSWORD', 'moriczelfho123'),
+            'root'     => env('FTP_SERVER_DIR', '/public_html'),
+            // 'port'     => 21,
+            // 'passive'  => true,
+            // 'ssl'      => false,
+            // 'timeout'  => 30,
+        ],
 
     ],
 
