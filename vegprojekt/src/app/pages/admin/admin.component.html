@@ -1,0 +1,106 @@
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">&#9632;</span>
+      <span class="brand-text">Vezerlőpult</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item" [class.active]="activeSection==='bookings'"   (click)="setSection('bookings')">Foglalasok</button>
+      <button class="nav-item" [class.active]="activeSection==='barbers'"    (click)="setSection('barbers')">Borbelyok</button>
+      <button class="nav-item" [class.active]="activeSection==='hairstyles'" (click)="setSection('hairstyles')">Hajtipusok</button>
+      <button class="nav-item" [class.active]="activeSection==='gallery'"    (click)="setSection('gallery')">Galeria</button>
+      <button class="nav-item" [class.active]="activeSection==='users'"      (click)="setSection('users')">Felhasznalok</button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" class="back-link">Vissza a foroldalra</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="admin-main">
+
+    <!-- Header bar -->
+    <div class="admin-topbar">
+      <h1 class="admin-heading">{{ activeSection | titlecase }}</h1>
+      @if (canCreate()) {
+        <button class="btn-create" (click)="openCreate()">+ Uj letrehozasa</button>
+      }
+    </div>
+
+    <!-- Alerts -->
+    @if (error) {
+      <div class="alert alert-error">{{ error }}</div>
+    }
+    @if (successMsg) {
+      <div class="alert alert-success">{{ successMsg }}</div>
+    }
+
+    <!-- Table -->
+    @if (loading) {
+      <p class="admin-loading">Betoltes...</p>
+    } @else {
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              @for (col of columns(); track col) {
+                <th>{{ col }}</th>
+              }
+              <th>Muveletek</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (currentList.length === 0) {
+              <tr><td [attr.colspan]="columns().length + 1" class="empty-row">Nincsenek rekordok.</td></tr>
+            }
+            @for (item of currentList; track item.id) {
+              <tr>
+                @for (val of rowValues(item); track $index) {
+                  <td>{{ val }}</td>
+                }
+                <td class="action-cell">
+                  @if (activeSection !== 'bookings' && activeSection !== 'gallery') {
+                    <button class="btn-edit" (click)="openEdit(item)">Szerkesztes</button>
+                  }
+                  <button class="btn-delete" (click)="delete(item.id)">Torles</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </main>
+
+  <!-- Modal -->
+  @if (modalOpen) {
+    <div class="modal-backdrop" (click)="closeModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2 class="modal-title">{{ modalMode === 'create' ? 'Letrehozas' : 'Szerkesztes' }}</h2>
+          <button class="modal-close" (click)="closeModal()">X</button>
+        </div>
+        <div class="modal-body">
+          @for (field of fields; track field.key) {
+            <div class="form-row">
+              <label class="form-label">{{ field.label }}</label>
+              @if (field.type === 'textarea') {
+                <textarea class="form-input" [(ngModel)]="formData[field.key]" rows="3"></textarea>
+              } @else {
+                <input class="form-input" [type]="field.type" [(ngModel)]="formData[field.key]" />
+              }
+            </div>
+          }
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" (click)="closeModal()">Megse</button>
+          <button class="btn-save" (click)="save()">Mentes</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>
+

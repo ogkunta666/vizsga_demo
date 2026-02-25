@@ -1,0 +1,644 @@
+/* �� Oldal alap ��������������������������������������������������� */
+.profile-page {
+  min-height: calc(100vh - 128px);
+  background-color: #0a0a0a;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+.profile-loading,
+.profile-error {
+  color: #aaaaaa;
+  font-size: 0.95rem;
+  text-align: center;
+}
+.profile-error { color: #dc2626; }
+
+/* �� Layout ������������������������������������������������������� */
+.profile-layout {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  max-width: 960px;
+  align-items: flex-start;
+}
+
+/* �� Profil kartya ������������������������������������������������ */
+.profile-card {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 2rem;
+}
+
+.team-avatar {
+  width: 72px;
+  height: 72px;
+  background-color: #2a2a2a;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+.team-avatar svg { width: 100%; height: 100%; }
+
+.team-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  margin: 0;
+}
+
+.team-role {
+  color: #666666;
+  font-size: 0.82rem;
+  text-align: center;
+  margin: 0;
+}
+
+.admin-btn {
+  margin-top: 1rem;
+  display: inline-block;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+  letter-spacing: 0.02em;
+}
+.admin-btn:hover { background: #334155; border-color: #64748b; }
+
+/* �� Foglalasok szekci� ������������������������������������������� */
+.bookings-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  min-width: 0;
+}
+
+.bookings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bookings-heading {
+  color: #f0f0f0;
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.bookings-heading--past {
+  color: #555;
+  font-size: 1rem;
+}
+
+.bookings-loading {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* �� Ures allapot ������������������������������������������������� */
+.bookings-empty {
+  background: #111;
+  border: 1px dashed #2a2a2a;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bookings-empty-icon {
+  font-size: 2rem;
+}
+
+.bookings-empty p {
+  color: #555;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.new-booking-btn {
+  display: inline-block;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #ccc;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.new-booking-btn:hover { border-color: #666; color: #fff; }
+
+/* �� Foglal�s lista ����������������������������������������������� */
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* �� Foglal�s kartya ���������������������������������������������� */
+.booking-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.booking-card:hover { border-color: #3a3a3a; }
+
+.booking-card--past {
+  opacity: 0.6;
+}
+.booking-card--past:hover { opacity: 0.8; }
+
+/* �� Status sav ��������������������������������������������������� */
+.booking-status-bar {
+  padding: 0.4rem 1rem;
+  background: #0f0f0f;
+  border-bottom: 1px solid #1e1e1e;
+  display: flex;
+  align-items: center;
+}
+
+.booking-status {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+}
+
+.status--confirmed  { background: #052e16; color: #4ade80; border: 1px solid #166534; }
+.status--pending    { background: #1c1003; color: #fbbf24; border: 1px solid #92400e; }
+.status--cancelled  { background: #1c0505; color: #f87171; border: 1px solid #7f1d1d; }
+.status--completed  { background: #0f172a; color: #94a3b8; border: 1px solid #1e293b; }
+
+/* �� Foglal�s t�rzs ����������������������������������������������� */
+.booking-body {
+  padding: 1rem 1.25rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+/* �� Borbely blokk ������������������������������������������������ */
+.booking-barber {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.barber-avatar {
+  width: 44px;
+  height: 44px;
+  background: #2a2a2a;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.barber-avatar svg { width: 100%; height: 100%; }
+
+.booking-barber-name {
+  color: #e0e0e0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.booking-barber-spec {
+  color: #666;
+  font-size: 0.78rem;
+  margin: 0.15rem 0 0;
+}
+
+/* �� Reszletek ���������������������������������������������������� */
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-left: 1px solid #222;
+  padding-left: 1.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.booking-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #aaa;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.detail-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+}
+
+/* �� Reszponziv ��������������������������������������������������� */
+@media (max-width: 720px) {
+  .profile-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profile-card {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1.25rem;
+  }
+
+  .booking-body {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .booking-details {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid #222;
+    padding-top: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-page {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* ── Role badge ─────────────────────────────────────────────────── */
+.role-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  margin-top: 0.1rem;
+}
+.role-badge--user    { background: #1a1a2e; color: #818cf8; border: 1px solid #3730a3; }
+.role-badge--barber  { background: #052e16; color: #4ade80; border: 1px solid #166534; }
+.role-badge--admin   { background: #1c0505; color: #f87171; border: 1px solid #7f1d1d; }
+
+/* ── Borbély panel ──────────────────────────────────────────────── */
+.barber-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.barber-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.barber-panel-title {
+  font-family: Georgia, serif;
+  font-size: 1.3rem;
+  color: #f0f0f0;
+  margin: 0 0 0.3rem;
+}
+
+.barber-panel-sub {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ── Count badge ────────────────────────────────────────────────── */
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a2e1a;
+  color: #4ade80;
+  border: 1px solid #166534;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  padding: 0 0.4rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+.count-badge--muted {
+  background: #1a1a1a;
+  color: #555;
+  border-color: #333;
+}
+
+/* ── Borbély booking táblázat ───────────────────────────────────── */
+.barber-booking-table {
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.barber-booking-table--past {
+  opacity: 0.65;
+}
+
+.bbt-header {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 1.2fr 80px;
+  background: #0f0f0f;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid #222;
+  gap: 0.75rem;
+}
+.bbt-header span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+}
+
+.bbt-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 1.2fr 80px;
+  padding: 0.75rem 1rem;
+  gap: 0.75rem;
+  border-bottom: 1px solid #1a1a1a;
+  align-items: center;
+  transition: background 0.15s;
+}
+.bbt-row:last-child { border-bottom: none; }
+.bbt-row:hover { background: #161616; }
+
+.bbt-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.85rem;
+  color: #aaa;
+  min-width: 0;
+}
+
+.bbt-guest .guest-name {
+  color: #e0e0e0;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+.bbt-guest .guest-email,
+.bbt-guest .guest-phone {
+  color: #555;
+  font-size: 0.75rem;
+}
+
+.bbt-date {
+  color: #ccc;
+  font-size: 0.82rem;
+}
+.bbt-time {
+  color: #666;
+  font-size: 0.75rem;
+}
+
+.bbt-note {
+  color: #666;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Action gombok ──────────────────────────────────────────────── */
+.bbt-actions {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  background: none;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s, border-color 0.15s;
+  line-height: 1;
+}
+.action-btn:hover { background: #222; border-color: #444; }
+
+.action-btn--delete:hover { border-color: #7f1d1d; background: #1c0505; }
+.action-btn--confirm { border-color: #7f1d1d; color: #f87171; font-size: 0.72rem; }
+.action-btn--confirm:hover { background: #2a0d0d; }
+.action-btn--cancel { font-size: 0.72rem; color: #666; }
+
+.confirm-delete {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.confirm-delete span {
+  font-size: 0.72rem;
+  color: #f87171;
+  white-space: nowrap;
+}
+
+/* ── Modal overlay ──────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.modal {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid #222;
+}
+.modal-header h3 {
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  color: #f0f0f0;
+  margin: 0;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.15s;
+}
+.modal-close:hover { color: #ccc; }
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-error {
+  background: #2a0d0d;
+  border: 1px solid #7f1d1d;
+  border-radius: 7px;
+  color: #f87171;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.9rem;
+}
+
+.modal-success {
+  background: #052e16;
+  border: 1px solid #166534;
+  border-radius: 7px;
+  color: #4ade80;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.9rem;
+}
+
+/* ── Form grid ──────────────────────────────────────────────────── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field--full {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.form-field input,
+.form-field select {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 7px;
+  color: #e0e0e0;
+  font-size: 0.875rem;
+  padding: 0.55rem 0.75rem;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.form-field input:focus,
+.form-field select:focus { border-color: #4ade80; }
+.form-field select option { background: #141414; }
+
+/* ── Modal footer ───────────────────────────────────────────────── */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #222;
+}
+
+.modal-btn {
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.55rem 1.25rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.modal-btn--cancel {
+  background: #1a1a1a;
+  border-color: #333;
+  color: #aaa;
+}
+.modal-btn--cancel:hover { background: #222; border-color: #555; }
+.modal-btn--save {
+  background: #166534;
+  border-color: #166534;
+  color: #fff;
+}
+.modal-btn--save:hover:not(:disabled) { background: #15803d; }
+.modal-btn--save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Reszponzív táblázat ────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .bbt-header { display: none; }
+  .bbt-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0.9rem 1rem;
+  }
+  .bbt-actions { flex-direction: row; justify-content: flex-start; }
+}
+
+@media (max-width: 560px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .form-field--full { grid-column: 1; }
+}

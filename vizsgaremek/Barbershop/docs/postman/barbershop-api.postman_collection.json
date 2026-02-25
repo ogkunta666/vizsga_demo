@@ -1,0 +1,498 @@
+{
+  "info": {
+    "name": "Barber Shop API",
+    "_postman_id": "barbershop-api-collection-v1",
+    "description": "Barber Shop – Vizsgaremek API Collection\nBase URL: http://127.0.0.1/api\n\nHasználat:\n1. Futtasd a 'Login' kérést\n2. A token automatikusan bekerül a {{token}} változóba\n3. Az auth-igénylő kérések ezt használják Bearer tokenként",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1/api", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "barberId", "value": "1", "type": "string" },
+    { "key": "bookingId", "value": "1", "type": "string" },
+    { "key": "hairstyleId", "value": "1", "type": "string" },
+    { "key": "galleryId", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "🏓 Ping",
+      "item": [
+        {
+          "name": "Ping",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/ping", "host": ["{{baseUrl}}"], "path": ["ping"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teszt Elek\",\n  \"email\": \"teszt@pelda.hu\",\n  \"password\": \"Secret123!\",\n  \"password_confirmation\": \"Secret123!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "    console.log('Token mentve:', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@barbershop.hu\",\n  \"password\": \"Admin1234!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login (User)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@barbershop.hu\",\n  \"password\": \"User1234!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          }
+        },
+        {
+          "name": "Me (aktuális user)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "✂ Borbélyok",
+      "item": [
+        {
+          "name": "Borbély lista (GET /barbers)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/barbers", "host": ["{{baseUrl}}"], "path": ["barbers"] }
+          }
+        },
+        {
+          "name": "Borbély részlet (GET /barbers/:id)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/barbers/{{barberId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["barbers", "{{barberId}}"]
+            }
+          }
+        },
+        {
+          "name": "Következő szabad slot (GET /barbers/:id/next-slot)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/barbers/{{barberId}}/next-slot",
+              "host": ["{{baseUrl}}"],
+              "path": ["barbers", "{{barberId}}", "next-slot"]
+            }
+          }
+        },
+        {
+          "name": "Borbély naptár (GET /barbers/:id/schedule)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/barbers/{{barberId}}/schedule?dateFrom=2026-02-24&dateTo=2026-03-02",
+              "host": ["{{baseUrl}}"],
+              "path": ["barbers", "{{barberId}}", "schedule"],
+              "query": [
+                { "key": "dateFrom", "value": "2026-02-24" },
+                { "key": "dateTo", "value": "2026-03-02" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Borbély létrehozás [ADMIN] (POST /barbers)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kovács Péter\",\n  \"specialization\": \"Skin Fade\",\n  \"bio\": \"10 éves tapasztalat, díjnyertes borbély.\",\n  \"photo_url\": \"https://via.placeholder.com/400x400?text=Kovacs+Peter\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/barbers", "host": ["{{baseUrl}}"], "path": ["barbers"] }
+          }
+        },
+        {
+          "name": "Borbély módosítás [ADMIN] (PUT /barbers/:id)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kovács Péter\",\n  \"specialization\": \"Klasszikus + Fade\",\n  \"bio\": \"Frissített bemutatkozó szöveg.\",\n  \"photo_url\": \"https://via.placeholder.com/400x400?text=Updated\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/barbers/{{barberId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["barbers", "{{barberId}}"]
+            }
+          }
+        },
+        {
+          "name": "Borbély törlés [ADMIN] (DELETE /barbers/:id)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/barbers/{{barberId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["barbers", "{{barberId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📅 Foglalások",
+      "item": [
+        {
+          "name": "Szabad időpontok (GET /availability)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/availability?dateFrom=2026-02-24&dateTo=2026-02-28&barberId={{barberId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["availability"],
+              "query": [
+                { "key": "dateFrom", "value": "2026-02-24" },
+                { "key": "dateTo", "value": "2026-02-28" },
+                { "key": "barberId", "value": "{{barberId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Foglalás létrehozás (POST /bookings)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.booking && json.booking.id) {",
+                  "    pm.collectionVariables.set('bookingId', json.booking.id);",
+                  "    console.log('Booking ID mentve:', json.booking.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barber_id\": 1,\n  \"customer_name\": \"Teszt Elek\",\n  \"customer_email\": \"teszt@pelda.hu\",\n  \"customer_phone\": \"+36 30 123 4567\",\n  \"start_at\": \"2026-03-01T10:00:00\",\n  \"duration_min\": 30,\n  \"note\": \"Allergia: latex\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/bookings", "host": ["{{baseUrl}}"], "path": ["bookings"] }
+          }
+        },
+        {
+          "name": "Foglalás létrehozás – ÜTKÖZÉS TESZT (POST /bookings)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barber_id\": 1,\n  \"customer_name\": \"Másik Vendég\",\n  \"customer_email\": \"masik@pelda.hu\",\n  \"customer_phone\": \"+36 30 987 6543\",\n  \"start_at\": \"2026-03-01T10:00:00\",\n  \"duration_min\": 30,\n  \"note\": \"Ez 409-et kell dobjon\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/bookings", "host": ["{{baseUrl}}"], "path": ["bookings"] }
+          }
+        },
+        {
+          "name": "Foglalások lista [AUTH] (GET /bookings)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/bookings", "host": ["{{baseUrl}}"], "path": ["bookings"] }
+          }
+        },
+        {
+          "name": "Foglalás részlet [AUTH] (GET /bookings/:id)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["bookings", "{{bookingId}}"]
+            }
+          }
+        },
+        {
+          "name": "Foglalás módosítás [ADMIN] (PUT /bookings/:id)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barber_id\": 1,\n  \"customer_name\": \"Teszt Elek\",\n  \"customer_email\": \"teszt@pelda.hu\",\n  \"customer_phone\": \"+36 30 123 4567\",\n  \"start_at\": \"2026-03-01T11:00:00\",\n  \"duration_min\": 45,\n  \"note\": \"Módosított foglalás\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["bookings", "{{bookingId}}"]
+            }
+          }
+        },
+        {
+          "name": "Foglalás lemondás [AUTH] (DELETE /bookings/:id)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["bookings", "{{bookingId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💈 Hajstílusok",
+      "item": [
+        {
+          "name": "Hajstílus lista (GET /hairstyles)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/hairstyles", "host": ["{{baseUrl}}"], "path": ["hairstyles"] }
+          }
+        },
+        {
+          "name": "Hajstílus részlet (GET /hairstyles/:id)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/hairstyles/{{hairstyleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["hairstyles", "{{hairstyleId}}"]
+            }
+          }
+        },
+        {
+          "name": "Hajstílus létrehozás [ADMIN] (POST /hairstyles)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Buzz Cut\",\n  \"description\": \"Egyenletesen rövid, géppel vágott stílus.\",\n  \"price_from\": 2000\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/hairstyles", "host": ["{{baseUrl}}"], "path": ["hairstyles"] }
+          }
+        },
+        {
+          "name": "Hajstílus módosítás [ADMIN] (PUT /hairstyles/:id)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Buzz Cut Pro\",\n  \"description\": \"Frissített leírás.\",\n  \"price_from\": 2500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hairstyles/{{hairstyleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["hairstyles", "{{hairstyleId}}"]
+            }
+          }
+        },
+        {
+          "name": "Hajstílus törlés [ADMIN] (DELETE /hairstyles/:id)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/hairstyles/{{hairstyleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["hairstyles", "{{hairstyleId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🖼 Galéria",
+      "item": [
+        {
+          "name": "Galéria lista (GET /gallery)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/gallery", "host": ["{{baseUrl}}"], "path": ["gallery"] }
+          }
+        },
+        {
+          "name": "Galéria kép hozzáadás [ADMIN] (POST /gallery)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.image && json.image.id) {",
+                  "    pm.collectionVariables.set('galleryId', json.image.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Új galéria kép\",\n  \"image_url\": \"https://via.placeholder.com/600x800?text=Uj+Kep\",\n  \"source\": \"Kiss Bence\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/gallery", "host": ["{{baseUrl}}"], "path": ["gallery"] }
+          }
+        },
+        {
+          "name": "Galéria kép törlés [ADMIN] (DELETE /gallery/:id)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/gallery/{{galleryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["gallery", "{{galleryId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

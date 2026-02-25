@@ -1,0 +1,337 @@
+<div class="profile-page">
+
+  @if (loading) {
+    <p class="profile-loading">Betöltés...</p>
+  }
+
+  @if (error) {
+    <p class="profile-error">{{ error }}</p>
+  }
+
+  @if (!loading && !error && user) {
+    <div class="profile-layout">
+
+      <!-- Profil kártya -->
+      <div class="profile-card">
+        <div class="team-avatar">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="24" r="12" fill="#444"/>
+            <path d="M8 56c0-13.255 10.745-24 24-24s24 10.745 24 24" fill="#444"/>
+          </svg>
+        </div>
+        <p class="team-name">{{ user.name }}</p>
+        <p class="team-role">{{ user.email }}</p>
+        <span class="role-badge role-badge--{{ user.role }}">{{ user.role }}</span>
+
+        @if (user.role === 'admin') {
+          <a routerLink="/admin" class="admin-btn">Admin panel</a>
+        }
+      </div>
+
+      <!-- Jobb oldal -->
+      <div class="bookings-section">
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- BORBÉLY NÉZET (role: barber vagy admin)                -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        @if (user.role === 'barber' || user.role === 'admin') {
+          @if (barberProfile) {
+            <div class="barber-panel">
+              <div class="barber-panel-header">
+                <div>
+                  <h2 class="barber-panel-title">Borbély kezelőfelület</h2>
+                  <p class="barber-panel-sub">{{ barberProfile.name }}
+                    @if (barberProfile.specialization) { — {{ barberProfile.specialization }} }
+                  </p>
+                </div>
+              </div>
+
+              @if (loadingBarberBookings) {
+                <p class="bookings-loading">Foglalások betöltése...</p>
+              } @else {
+
+                <!-- Közelgő foglalások borbélynak -->
+                <div class="bookings-group">
+                  <h3 class="bookings-heading">Közelgő foglalások
+                    <span class="count-badge">{{ barberUpcoming.length }}</span>
+                  </h3>
+
+                  @if (barberUpcoming.length === 0) {
+                    <div class="bookings-empty">
+                      <span class="bookings-empty-icon">📋</span>
+                      <p>Nincs közelgő foglalás.</p>
+                    </div>
+                  } @else {
+                    <div class="barber-booking-table">
+                      <div class="bbt-header">
+                        <span>Vendég</span>
+                        <span>Időpont</span>
+                        <span>Megjegyzés</span>
+                        <span>Státusz</span>
+                        <span></span>
+                      </div>
+                      @for (b of barberUpcoming; track b.id) {
+                        <div class="bbt-row">
+                          <div class="bbt-cell bbt-guest">
+                            <span class="guest-name">{{ b.customer_name }}</span>
+                            <span class="guest-email">{{ b.customer_email }}</span>
+                            <span class="guest-phone">{{ b.customer_phone }}</span>
+                          </div>
+                          <div class="bbt-cell">
+                            <span class="bbt-date">{{ formatDateTime(b.start_at).date }}</span>
+                            <span class="bbt-time">{{ formatDateTime(b.start_at).time }} ({{ b.duration_min }} perc)</span>
+                          </div>
+                          <div class="bbt-cell bbt-note">
+                            {{ b.note || '—' }}
+                          </div>
+                          <div class="bbt-cell">
+                            <span class="booking-status {{ statusClass(b.status) }}">{{ statusLabel(b.status) }}</span>
+                          </div>
+                          <div class="bbt-cell bbt-actions">
+                            <button class="action-btn action-btn--edit" (click)="openEdit(b)" title="Szerkesztés">✏️</button>
+                            @if (deletingId === b.id) {
+                              <div class="confirm-delete">
+                                <span>Biztos?</span>
+                                <button class="action-btn action-btn--confirm" (click)="doDelete(b.id)">Igen</button>
+                                <button class="action-btn action-btn--cancel" (click)="cancelDelete()">Nem</button>
+                              </div>
+                            } @else {
+                              <button class="action-btn action-btn--delete" (click)="confirmDelete(b.id)" title="Lemondás">🗑️</button>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- Korábbi foglalások borbélynak -->
+                @if (barberPast.length > 0) {
+                  <div class="bookings-group">
+                    <h3 class="bookings-heading bookings-heading--past">Korábbi foglalások
+                      <span class="count-badge count-badge--muted">{{ barberPast.length }}</span>
+                    </h3>
+                    <div class="barber-booking-table barber-booking-table--past">
+                      <div class="bbt-header">
+                        <span>Vendég</span>
+                        <span>Időpont</span>
+                        <span>Megjegyzés</span>
+                        <span>Státusz</span>
+                        <span></span>
+                      </div>
+                      @for (b of barberPast; track b.id) {
+                        <div class="bbt-row">
+                          <div class="bbt-cell bbt-guest">
+                            <span class="guest-name">{{ b.customer_name }}</span>
+                            <span class="guest-email">{{ b.customer_email }}</span>
+                          </div>
+                          <div class="bbt-cell">
+                            <span class="bbt-date">{{ formatDateTime(b.start_at).date }}</span>
+                            <span class="bbt-time">{{ formatDateTime(b.start_at).time }}</span>
+                          </div>
+                          <div class="bbt-cell bbt-note">{{ b.note || '—' }}</div>
+                          <div class="bbt-cell">
+                            <span class="booking-status {{ statusClass(b.status) }}">{{ statusLabel(b.status) }}</span>
+                          </div>
+                          <div class="bbt-cell bbt-actions">
+                            <button class="action-btn action-btn--edit" (click)="openEdit(b)" title="Szerkesztés">✏️</button>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
+              }
+            </div>
+          } @else if (!loadingBarberBookings) {
+            <div class="bookings-empty">
+              <span class="bookings-empty-icon">⚠️</span>
+              <p>Nincs hozzárendelt borbély profil ehhez a fiókhoz.</p>
+            </div>
+          }
+        }
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- VENDÉG NÉZET                                           -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        @if (user.role === 'user') {
+
+          <!-- Közelgő foglalások -->
+          <div class="bookings-group">
+            <h2 class="bookings-heading">Közelgő foglalásaim</h2>
+
+            @if (loadingBookings) {
+              <p class="bookings-loading">Betöltés...</p>
+            } @else if (upcomingBookings.length === 0) {
+              <div class="bookings-empty">
+                <span class="bookings-empty-icon">📅</span>
+                <p>Nincs közelgő foglalásod.</p>
+                <a routerLink="/booking" class="new-booking-btn">Új foglalás</a>
+              </div>
+            } @else {
+              <div class="booking-list">
+                @for (b of upcomingBookings; track b.id) {
+                  <div class="booking-card">
+                    <div class="booking-status-bar">
+                      <span class="booking-status {{ statusClass(b.status) }}">{{ statusLabel(b.status) }}</span>
+                    </div>
+                    <div class="booking-body">
+                      <div class="booking-barber">
+                        <div class="barber-avatar">
+                          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="32" cy="24" r="12" fill="#555"/>
+                            <path d="M8 56c0-13.255 10.745-24 24-24s24 10.745 24 24" fill="#555"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="booking-barber-name">{{ b.barber?.name ?? 'Ismeretlen borbély' }}</p>
+                          @if (b.barber?.specialization) {
+                            <p class="booking-barber-spec">{{ b.barber!.specialization }}</p>
+                          }
+                        </div>
+                      </div>
+                      <div class="booking-details">
+                        <div class="booking-detail-row">
+                          <span class="detail-icon">🗓</span>
+                          <span>{{ formatDateTime(b.start_at).date }}</span>
+                        </div>
+                        <div class="booking-detail-row">
+                          <span class="detail-icon">🕐</span>
+                          <span>{{ formatDateTime(b.start_at).time }} &nbsp;({{ b.duration_min }} perc)</span>
+                        </div>
+                        @if (b.note) {
+                          <div class="booking-detail-row">
+                            <span class="detail-icon">✂️</span>
+                            <span>{{ b.note }}</span>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Korábbi foglalások -->
+          @if (!loadingBookings && pastBookings.length > 0) {
+            <div class="bookings-group">
+              <h2 class="bookings-heading bookings-heading--past">Korábbi foglalások</h2>
+              <div class="booking-list">
+                @for (b of pastBookings; track b.id) {
+                  <div class="booking-card booking-card--past">
+                    <div class="booking-status-bar">
+                      <span class="booking-status {{ statusClass(b.status) }}">{{ statusLabel(b.status) }}</span>
+                    </div>
+                    <div class="booking-body">
+                      <div class="booking-barber">
+                        <div class="barber-avatar">
+                          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="32" cy="24" r="12" fill="#444"/>
+                            <path d="M8 56c0-13.255 10.745-24 24-24s24 10.745 24 24" fill="#444"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="booking-barber-name">{{ b.barber?.name ?? 'Ismeretlen borbély' }}</p>
+                          @if (b.barber?.specialization) {
+                            <p class="booking-barber-spec">{{ b.barber!.specialization }}</p>
+                          }
+                        </div>
+                      </div>
+                      <div class="booking-details">
+                        <div class="booking-detail-row">
+                          <span class="detail-icon">🗓</span>
+                          <span>{{ formatDateTime(b.start_at).date }}</span>
+                        </div>
+                        <div class="booking-detail-row">
+                          <span class="detail-icon">🕐</span>
+                          <span>{{ formatDateTime(b.start_at).time }} &nbsp;({{ b.duration_min }} perc)</span>
+                        </div>
+                        @if (b.note) {
+                          <div class="booking-detail-row">
+                            <span class="detail-icon">✂️</span>
+                            <span>{{ b.note }}</span>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+        }
+
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- SZERKESZTŐ MODAL                                              -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  @if (editingBooking) {
+    <div class="modal-overlay" (click)="closeEdit()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Foglalás szerkesztése</h3>
+          <button class="modal-close" (click)="closeEdit()">✕</button>
+        </div>
+
+        <div class="modal-body">
+          @if (saveError) {
+            <div class="modal-error">{{ saveError }}</div>
+          }
+          @if (saveSuccess) {
+            <div class="modal-success">Sikeresen mentve!</div>
+          }
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label>Vendég neve</label>
+              <input type="text" [(ngModel)]="editForm.customer_name" placeholder="Teljes név"/>
+            </div>
+            <div class="form-field">
+              <label>E-mail</label>
+              <input type="email" [(ngModel)]="editForm.customer_email" placeholder="email@cim.hu"/>
+            </div>
+            <div class="form-field">
+              <label>Telefonszám</label>
+              <input type="text" [(ngModel)]="editForm.customer_phone" placeholder="+36..."/>
+            </div>
+            <div class="form-field">
+              <label>Időpont</label>
+              <input type="datetime-local" [(ngModel)]="editForm.start_at"/>
+            </div>
+            <div class="form-field">
+              <label>Időtartam (perc)</label>
+              <input type="number" [(ngModel)]="editForm.duration_min" min="15" max="180" step="15"/>
+            </div>
+            <div class="form-field">
+              <label>Státusz</label>
+              <select [(ngModel)]="editForm.status">
+                <option value="confirmed">Visszaigazolt</option>
+                <option value="pending">Függőben</option>
+                <option value="completed">Teljesített</option>
+                <option value="cancelled">Lemondva</option>
+              </select>
+            </div>
+            <div class="form-field form-field--full">
+              <label>Megjegyzés</label>
+              <input type="text" [(ngModel)]="editForm.note" placeholder="pl. Fade, szakáll..."/>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-btn modal-btn--cancel" (click)="closeEdit()">Mégse</button>
+          <button class="modal-btn modal-btn--save" [disabled]="saving" (click)="saveEdit()">
+            @if (saving) { Mentés... } @else { Mentés }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

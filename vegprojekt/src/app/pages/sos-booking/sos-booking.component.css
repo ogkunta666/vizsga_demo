@@ -1,0 +1,260 @@
+.sos-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: #0a0a0a;
+}
+
+.sos-card {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.sos-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sos-badge {
+  background: #c0392b;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.sos-title {
+  font-family: Georgia, serif;
+  font-size: 2rem;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.sos-subtitle {
+  color: #888;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Form ───────────────────────────────────────────────────────── */
+.sos-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.field-label {
+  color: #ccc;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Dátum gombok ───────────────────────────────────────────────── */
+.date-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.date-btn {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #ccc;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.date-btn .date-sub {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.date-btn:hover {
+  border-color: #c0392b;
+  background: #1e1010;
+  color: #e0e0e0;
+}
+
+.date-btn.active {
+  border-color: #c0392b;
+  background: #2a0d0d;
+  color: #fff;
+}
+
+.date-btn.active .date-sub {
+  color: #e87070;
+}
+
+/* ── Időszak gombok ─────────────────────────────────────────────── */
+.period-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.period-btn {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  color: #ccc;
+  padding: 1.1rem 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.period-icon {
+  font-size: 1.6rem;
+}
+
+.period-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ddd;
+}
+
+.period-range {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.period-btn:hover {
+  border-color: #c0392b;
+  background: #1e1010;
+}
+
+.period-btn.active {
+  border-color: #c0392b;
+  background: #2a0d0d;
+}
+
+.period-btn.active .period-name {
+  color: #fff;
+}
+
+.period-btn.active .period-range {
+  color: #e87070;
+}
+
+/* ── Error ──────────────────────────────────────────────────────── */
+.sos-error {
+  background: #2a0d0d;
+  border: 1px solid #c0392b;
+  border-radius: 8px;
+  color: #e87070;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+/* ── Submit gomb ────────────────────────────────────────────────── */
+.sos-submit-btn {
+  background: #c0392b;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 0.9rem 1.5rem;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s, opacity 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.sos-submit-btn:hover:not(:disabled) {
+  background: #a93226;
+}
+
+.sos-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ────────────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Vissza link ────────────────────────────────────────────────── */
+.back-link {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #ccc;
+}
+
+/* ── Reszponzív ─────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .sos-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .date-options {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+  }
+
+  .period-options {
+    grid-template-columns: 1fr;
+  }
+}

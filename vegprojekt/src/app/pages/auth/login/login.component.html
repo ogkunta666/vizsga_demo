@@ -1,0 +1,48 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-title">Bejelentkezés</h1>
+    <p class="auth-subtitle">Üdvözlünk vissza!</p>
+
+    <form class="auth-form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">E-mail cím</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="pelda@email.com"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Jelszó</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="••••••••"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
+
+      <div class="form-options">
+        <a routerLink="/forgot-password">Elfelejtett jelszó?</a>
+      </div>
+
+      @if (error) {
+        <p class="auth-error">{{ error }}</p>
+      }
+
+      <button type="submit" class="auth-btn" [disabled]="loading">
+        {{ loading ? 'Betöltés...' : 'Bejelentkezés' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Még nincs fiókod? <a routerLink="/register">Regisztráció</a>
+    </p>
+  </div>
+</div>

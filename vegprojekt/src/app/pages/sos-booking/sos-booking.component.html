@@ -1,0 +1,79 @@
+<div class="sos-page">
+  <div class="sos-card">
+
+    <div class="sos-header">
+      <span class="sos-badge">SOS</span>
+      <h1 class="sos-title">SOS Foglalás</h1>
+      <p class="sos-subtitle">Válassz napot és időszakot – mi kiválasztjuk a legjobb szabad időpontot!</p>
+    </div>
+
+    <div class="sos-form">
+
+      <!-- Dátum választó -->
+      <div class="field-group">
+        <label class="field-label">Mikor szeretnél jönni?</label>
+        <div class="date-options">
+          @for (opt of dateOptions; track opt.value) {
+            <button
+              type="button"
+              class="date-btn"
+              [class.active]="selectedDate === opt.value"
+              (click)="selectedDate = opt.value"
+            >
+              {{ opt.label }}
+              <span class="date-sub">{{ opt.value }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Időszak választó -->
+      <div class="field-group">
+        <label class="field-label">Melyik időszak megfelelő?</label>
+        <div class="period-options">
+          <button
+            type="button"
+            class="period-btn"
+            [class.active]="selectedPeriod === 'morning'"
+            (click)="selectedPeriod = 'morning'"
+          >
+            <span class="period-icon">🌅</span>
+            <span class="period-name">Délelőtt</span>
+            <span class="period-range">09:00 – 12:00</span>
+          </button>
+          <button
+            type="button"
+            class="period-btn"
+            [class.active]="selectedPeriod === 'afternoon'"
+            (click)="selectedPeriod = 'afternoon'"
+          >
+            <span class="period-icon">☀️</span>
+            <span class="period-name">Délután</span>
+            <span class="period-range">12:00 – 18:00</span>
+          </button>
+        </div>
+      </div>
+
+      @if (error) {
+        <div class="sos-error">{{ error }}</div>
+      }
+
+      <!-- Foglalás gomb -->
+      <button
+        class="sos-submit-btn"
+        [disabled]="submitting"
+        (click)="bookNow()"
+      >
+        @if (submitting) {
+          <span class="spinner"></span> Keresés...
+        } @else {
+          Foglalj most!
+        }
+      </button>
+
+    </div>
+
+    <button class="back-link" (click)="goBack()">← Vissza a főoldalra</button>
+
+  </div>
+</div>

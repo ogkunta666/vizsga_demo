@@ -1,0 +1,147 @@
+/* ── Global styles ── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+/* ── Auth shared styles ── */
+.auth-page {
+  min-height: 100vh;
+  background-color: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: #111111;
+  border: 1px solid #222222;
+  border-radius: 12px;
+  padding: 2.5rem;
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.25rem 0;
+}
+
+.auth-subtitle {
+  color: #666666;
+  margin: 0 0 2rem 0;
+  font-size: 0.9rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #aaaaaa;
+}
+
+.form-group input {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 0.65rem 0.9rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #555555;
+}
+
+.form-group input::placeholder {
+  color: #444444;
+}
+
+.form-options {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -0.5rem;
+}
+
+.form-options a {
+  font-size: 0.82rem;
+  color: #888888;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.form-options a:hover {
+  color: #ffffff;
+}
+
+.auth-error {
+  color: #f87171;
+  font-size: 0.85rem;
+  margin: 0;
+  padding: 0.6rem 0.9rem;
+  background-color: #1f1010;
+  border: 1px solid #3f1010;
+  border-radius: 6px;
+}
+
+.auth-btn {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.25rem;
+}
+
+.auth-btn:hover:not(:disabled) {
+  background-color: #e5e5e5;
+}
+
+.auth-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auth-footer {
+  text-align: center;
+  margin: 1.5rem 0 0 0;
+  font-size: 0.875rem;
+  color: #666666;
+}
+
+.auth-footer a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}

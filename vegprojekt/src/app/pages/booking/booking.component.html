@@ -1,0 +1,137 @@
+<div class="booking-page">
+
+  <!-- Progress bar -->
+  <div class="steps">
+    <div class="step" [class.active]="step >= 1" [class.done]="step > 1">
+      <span class="step-num">1</span><span class="step-label">Borbély</span>
+    </div>
+    <div class="step-line" [class.done]="step > 1"></div>
+    <div class="step" [class.active]="step >= 2" [class.done]="step > 2">
+      <span class="step-num">2</span><span class="step-label">Nyírás</span>
+    </div>
+    <div class="step-line" [class.done]="step > 2"></div>
+    <div class="step" [class.active]="step >= 3">
+      <span class="step-num">3</span><span class="step-label">Időpont</span>
+    </div>
+  </div>
+
+  @if (error) {
+    <p class="booking-error">{{ error }}</p>
+  }
+
+  <!-- ── STEP 1: Borbély választás ── -->
+  @if (step === 1) {
+    <h2 class="section-title">Válassz borbélyt</h2>
+    @if (loadingBarbers) {
+      <p class="loading-text">Betöltés...</p>
+    } @else {
+      <div class="card-grid">
+        @for (b of barbers; track b.id) {
+          <div class="select-card" (click)="selectBarber(b)">
+            <div class="card-avatar">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="24" r="12" fill="#444"/>
+                <path d="M8 56c0-13.255 10.745-24 24-24s24 10.745 24 24" fill="#444"/>
+              </svg>
+            </div>
+            <p class="card-name">{{ b.name }}</p>
+            @if (b.specialization) {
+              <p class="card-sub">{{ b.specialization }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+
+  <!-- ── STEP 2: Nyírás választás ── -->
+  @if (step === 2) {
+    <div class="step-header">
+      <button class="back-btn" (click)="goBack()">← Vissza</button>
+      <h2 class="section-title">Válassz nyírást</h2>
+    </div>
+    <div class="card-grid">
+      @for (h of hairstyles; track h.id) {
+        <div class="select-card" (click)="selectHairstyle(h)">
+          <p class="card-name">{{ h.name }}</p>
+          <p class="card-sub">{{ h.duration }} perc · {{ h.price }} Ft</p>
+          @if (h.description) {
+            <p class="card-desc">{{ h.description }}</p>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── STEP 3: Naptár ── -->
+  @if (step === 3) {
+    <div class="step-header">
+      <button class="back-btn" (click)="goBack()">← Vissza</button>
+      <h2 class="section-title">Válassz időpontot</h2>
+    </div>
+
+    <!-- Kiválasztott összesítő -->
+    <div class="selection-summary">
+      <span>🧔 {{ selectedBarber?.name }}</span>
+      <span class="sep">·</span>
+      <span>✂️ {{ selectedHairstyle?.name }}</span>
+    </div>
+
+    <!-- Hét navigáció -->
+    <div class="week-nav">
+      <button class="nav-btn" (click)="prevWeek()" [disabled]="!canGoPrev">‹</button>
+      <span class="week-label">
+        @if (days.length > 0) {
+          {{ days[0].label.split(',')[0] === days[0].label ? days[0].label : days[0].date }}
+          –
+          {{ days[6]?.date }}
+        }
+      </span>
+      <button class="nav-btn" (click)="nextWeek()">›</button>
+    </div>
+
+    @if (loadingSlots) {
+      <p class="loading-text">Időpontok betöltése...</p>
+    } @else {
+      <!-- Naptár rács -->
+      <div class="calendar">
+        @for (day of days; track day.date) {
+          <div class="day-col">
+            <div class="day-header">{{ day.label }}</div>
+            <div class="slots">
+              @if (day.slots.length === 0) {
+                <span class="no-slots">–</span>
+              }
+              @for (slot of day.slots; track slot.datetime) {
+                <button
+                  class="slot-btn"
+                  [class.available]="slot.available"
+                  [class.booked]="!slot.available"
+                  [class.selected]="selectedSlot === slot.datetime"
+                  [disabled]="!slot.available"
+                  (click)="selectSlot(slot.datetime)"
+                >
+                  {{ formatTime(slot.datetime) }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Foglalás gomb -->
+      @if (selectedSlot) {
+        <div class="confirm-bar">
+          <span class="confirm-info">
+            Kiválasztott időpont: <strong>{{ selectedSlot | slice:0:10 }} {{ formatTime(selectedSlot!) }}</strong>
+          </span>
+          <button class="confirm-btn" (click)="confirmBooking()" [disabled]="submitting">
+            {{ submitting ? 'Foglalás...' : 'Foglalás megerősítése' }}
+          </button>
+        </div>
+      }
+    }
+  }
+
+</div>
+

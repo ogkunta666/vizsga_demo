@@ -1,0 +1,29 @@
+<div class="gallery-page">
+  <div class="gallery-header">
+    <h1>Galéria</h1>
+    <p>Munkáink és eredményeink</p>
+  </div>
+
+  @if (loading) {
+    <div class="gallery-state">
+      <p>Betöltés...</p>
+    </div>
+  } @else if (error) {
+    <div class="gallery-state error">
+      <p>{{ error }}</p>
+    </div>
+  } @else {
+    <div class="gallery-grid">
+      @for (image of images; track image.id) {
+        <div class="gallery-card">
+          <img [src]="image.image_url" [alt]="image.title" loading="lazy" />
+          <div class="gallery-card-overlay">
+            <span class="gallery-card-title">{{ image.title }}</span>
+            <span class="gallery-card-source">{{ image.source }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+

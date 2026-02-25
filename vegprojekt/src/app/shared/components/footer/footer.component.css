@@ -1,0 +1,21 @@
+.footer {
+  width: 100%;
+  background-color: #0f172a;
+  border-top: 1px solid #1e293b;
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-copy {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin: 0;
+}
